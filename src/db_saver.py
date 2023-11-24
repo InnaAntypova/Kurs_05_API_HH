@@ -6,7 +6,7 @@ class DBSaver:
     """ Класс для сохранения данных в PostgreSQL. """
     params = config()
 
-    def create_db(self):
+    def create_db(self) -> None:
         """ Метод для создания базы данных. """
         conn = psycopg2.connect(dbname='postgres', **DBSaver.params)
         conn.autocommit = True
@@ -17,7 +17,7 @@ class DBSaver:
         cursor.close()
         conn.close()
 
-    def create_tables(self):
+    def create_tables(self) -> None:
         """ Метод для создания таблиц в базе данных. """
         conn = psycopg2.connect(dbname='hh_info', **DBSaver.params)
         with conn.cursor() as cur:
@@ -45,7 +45,7 @@ class DBSaver:
         conn.commit()
         conn.close()
 
-    def save_data_to_database(self, all_info):
+    def save_data_to_database(self, all_info) -> None:
         """ Сохранение данных о работодателях и их вакансиях. """
         conn = psycopg2.connect(dbname='hh_info', **DBSaver.params)
         with conn.cursor() as cur:
@@ -60,8 +60,10 @@ class DBSaver:
                     for vacancy in vacancies:
                         cur.execute("INSERT INTO vacancies (employer_id, vacancy_name, area, address, salary_from, "
                                     "salary_to, published, employment, requirement, responsibility, vacancy_url) VALUES "
-                                    "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (employer_id, vacancy['vacancy_name'],
-                                                                                     vacancy['area'], vacancy['address'],
+                                    "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (employer_id,
+                                                                                     vacancy['vacancy_name'],
+                                                                                     vacancy['area'],
+                                                                                     vacancy['address'],
                                                                                      vacancy['salary_from'],
                                                                                      vacancy['salary_to'],
                                                                                      vacancy['published'],
@@ -72,5 +74,3 @@ class DBSaver:
 
         conn.commit()
         conn.close()
-
-
