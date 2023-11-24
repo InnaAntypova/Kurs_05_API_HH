@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.abc_api import ABCApi
 import requests
 from datetime import datetime
@@ -10,13 +12,13 @@ class HeadHunterAPI(ABCApi):
 
     headers = {"User-Agent": "HH-User-Agent"}
 
-    def get_employer_id_from_api(self, text: str):
+    def get_employer_id_from_api(self, text: str) -> str:
         """ Метод для получения ID работодателя по текстовому названию компании и информации о нем от API. """
         param = {
             'only_with_vacancies': True,
             'sort_by': 'by_vacancies_open',
             'page': 0,
-            'per_page': 100,
+            'per_page': 20,
             'text': text
         }
 
@@ -24,7 +26,7 @@ class HeadHunterAPI(ABCApi):
                                    params=param, timeout=10).json()['items'][0]['id']
         return employer_id
 
-    def get_employer_info_from_api(self, employer_id: str):
+    def get_employer_info_from_api(self, employer_id: str) -> list[dict[str, Any]]:
         """ Метод для получения информации о работодателе по его ID. """
         employer_url = f"https://api.hh.ru/employers/{employer_id}"
         data = requests.get(url=employer_url, headers=HeadHunterAPI.headers, timeout=10).json()
@@ -40,7 +42,7 @@ class HeadHunterAPI(ABCApi):
             'employer_url': employer_url})
         return employer_info
 
-    def get_vacancies_from_api(self, employer_id: str):
+    def get_vacancies_from_api(self, employer_id: str) -> list[dict[str, Any]]:
         """ Метод для получения вакансий конкретного работодателя по его ID. """
         vacancies_url = f"https://api.hh.ru/vacancies?employer_id={employer_id}"
         data = requests.get(url=vacancies_url, headers=HeadHunterAPI.headers, timeout=10).json()['items']
@@ -74,5 +76,4 @@ class HeadHunterAPI(ABCApi):
                 'employment': vacancy['employment']['name'],
                 'requirement': requirement,
                 'responsibility': responsibility})
-
         return vacancies_info
