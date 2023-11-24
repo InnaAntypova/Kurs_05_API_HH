@@ -1,7 +1,8 @@
+from src.db_saver import DBSaver
 from src.hh_api import HeadHunterAPI
 
 
-def get_from_api(search_text):
+def get_from_api(search_text: list[str]) -> list[dict]:
     """ Функция формирует список словарей из данных, полученных от API"""
     hh = HeadHunterAPI()
     all_info = []
@@ -15,7 +16,9 @@ def get_from_api(search_text):
     return all_info
 
 
-search_text = 'Pudov, Россельхозбанк'.split(', ')
-print(search_text)
-data = get_from_api(search_text)
-print(data)
+def write_data_to_db(data: list[dict]) -> None:
+    """ Функция создаст и запишет данные в таблицы """
+    db = DBSaver()
+    db.create_db()
+    db.create_tables()
+    db.save_data_to_database(data)
