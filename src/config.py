@@ -2,7 +2,7 @@ import os
 from configparser import ConfigParser
 
 
-path = os.path.join('src', 'database.ini')
+path = os.path.join('database.ini')
 
 
 def config(filename=path, section="postgresql"):
