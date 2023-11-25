@@ -70,6 +70,11 @@ def get_vacancies_with_keyword(user_words: list[str]) -> None:
     hh = DBManager()
     for word in user_words:
         data = hh.get_vacancies_with_keyword(word)
+        if not data:
+            print("По Вашему запросу ничего не найдено")
+            print("")
+            print("")
+
         for item in data:
             print(f"Название компании: {item[0]}\nНазвание вакансии: {item[1]}\nЗарплата: {item[2]} - {item[3]} рублей\n"
                   f"Адрес: {item[4]}\nТип занятости: {item[5]}\nТребования: {item[6]}\nОбязанности: {item[7]}\n"
